@@ -42,6 +42,10 @@ float Reversi::compete(Agent *a1, Agent *a2, uint16_t n_games, bool verbose) {
             }
         } else if (result == 0) {
             total--;
+            if (verbose) {
+                // std::cout << board << std::endl;
+                printf("[第%u場] 平手\n", g);
+            }
         } else {
             if (verbose) {
                 // std::cout << board << std::endl;
