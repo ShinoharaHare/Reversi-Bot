@@ -87,7 +87,7 @@ $(BUILD)/%.o: $(SRC)/%.cpp $(DIRS)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(DIRS):
-	$(MD) $(subst /,\,$@)
+	if not exist $(subst /,\,$@) $(MD)  $(subst /,\,$@)
 
 
 .PHONY: clean
