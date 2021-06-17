@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
     a3.set_name("佛系Agent1");
     a4.set_name("佛系Agent2");
 
-    a1.set_heuristic(Heuristic::pmce);
-    a2.set_heuristic(Heuristic::pmces);
+    a1.set_heuristic(Heuristic::bind_pmec(0.1, 0.1, 0.2, 0.6));
+    a2.set_heuristic(Heuristic::bind_pmec(0.1, 0.1, 0.1, 0.7));
     a1.set_name("Agent1");
     a2.set_name("Agent2");
     a1.set_depth(6);
