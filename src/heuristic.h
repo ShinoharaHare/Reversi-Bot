@@ -3,7 +3,9 @@
 #include "Reversi/GameBoard.h"
 #include "Reversi/utils.h"
 
-#define CALC(a, b, w) ((w) == 0 || ((a) + (b)) == 0) ? 0 : ((w) * ((a) - (b)) / ((a) + (b)))
+#include <functional>
+
+#define CALC(a, b, w) ((w) == 0 || ((a) + (b)) == 0) ? 0 : ((w) * double((a) - (b)) / double((a) + (b)))
 
 namespace Heuristic {
 using Heuristic = std::function<double(const GameBoard &, Color)>;

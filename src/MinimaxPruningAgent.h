@@ -2,8 +2,11 @@
 
 #include "Reversi/Agent.h"
 #include "Reversi/utils.h"
+
 #include <vector>
 #include <algorithm>
+#include <functional>
+
 
 struct Result {
     Position position;
