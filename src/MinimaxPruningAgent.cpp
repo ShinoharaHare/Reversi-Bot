@@ -7,7 +7,7 @@ static std::random_device rd;
 static std::default_random_engine gen = std::default_random_engine(rd());
 static std::uniform_int_distribution<int> dis(0, 1);
 
-Result MinimaxPruningAgent::alphabeta_impl(const GameBoard &board, Color color, uint8_t depth, double alpha, double beta, bool max_node) const {
+Result MinimaxPruningAgent::alphabeta_impl(const Board &board, Color color, uint8_t depth, double alpha, double beta, bool max_node) const {
     if (depth == 0) {
         return {-1, _heuristic(board, color)};
     }
@@ -23,7 +23,7 @@ Result MinimaxPruningAgent::alphabeta_impl(const GameBoard &board, Color color, 
     Result result;
     result.score = max_node ? -infinity : infinity;
     for (auto p : moves) {
-        GameBoard b = board.flip_pieces(cc, p);
+        Board b = board.flip_pieces(cc, p);
         Result r = alphabeta_impl(b, color, depth - 1, alpha, beta, !max_node);
 
         bool better = max_node ? r.score > result.score : r.score < result.score;
@@ -45,12 +45,12 @@ Result MinimaxPruningAgent::alphabeta_impl(const GameBoard &board, Color color, 
     return result;
 }
 
-Position MinimaxPruningAgent::alphabeta(const GameBoard &board, Color color, uint8_t depth) const {
+Position MinimaxPruningAgent::alphabeta(const Board &board, Color color, uint8_t depth) const {
     Result r = alphabeta_impl(board, color, depth, -infinity, infinity);
     return r.position;
 }
 
-Position MinimaxPruningAgent::next_move(const GameBoard &board, Color color) {
+Position MinimaxPruningAgent::next_move(const Board &board, Color color) {
     return alphabeta(board, color, _depth);
 }
 

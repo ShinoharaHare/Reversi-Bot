@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "GameBoard.h"
+#include "Board.h"
 
 class Agent
 {
@@ -11,7 +11,7 @@ public:
     void set_name(const char *name);
     const char *get_name() const;
 
-    virtual Position next_move(const GameBoard &board, Color color) = 0;
+    virtual Position next_move(const Board &board, Color color) = 0;
     
 protected:
     std::string _name;

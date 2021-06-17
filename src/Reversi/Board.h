@@ -5,19 +5,23 @@
 
 #include "Position.h"
 
-class GameBoard
+class Board
 {
 public:
-    GameBoard();
-    GameBoard(const char *state);
+    Board();
+    Board(const char *state);
 
     const char *get_data() const;
+
+    char get(uint8_t row, uint8_t col) const;
+    char &get(uint8_t row, uint8_t col);
+    void set(uint8_t row, uint8_t col, char piece);
 
     void reset();
 
     uint8_t count_flipable_pieces(Color color, const Position &pos, Direction dir) const;
-    GameBoard &flip_pieces(Color color, const Position &pos);
-    GameBoard flip_pieces(Color color, const Position &pos) const;
+    Board &flip_pieces(Color color, const Position &pos);
+    Board flip_pieces(Color color, const Position &pos) const;
 
     uint8_t count_corner(Color color) const;
     uint8_t count_pieces(Color color) const;
@@ -34,12 +38,12 @@ public:
 
     char &operator[](const Position &pos);
     char operator[](const Position &pos) const;
-    GameBoard &operator=(const char *state);
+    Board &operator=(const char *state);
 
 private:
     char _data[36];
 };
 
 
-// std::istream &operator>>(std::istream &is, GameBoard &gb);
-std::ostream &operator<<(std::ostream &os, const GameBoard &gb);
+// std::istream &operator>>(std::istream &is, Board &gb);
+std::ostream &operator<<(std::ostream &os, const Board &gb);

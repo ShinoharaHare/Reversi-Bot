@@ -1,4 +1,4 @@
-#include "GameBoard.h"
+#include "Board.h"
 #include "Agent.h"
 
 class Reversi

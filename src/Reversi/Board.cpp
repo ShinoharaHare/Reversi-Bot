@@ -1,15 +1,27 @@
-#include "GameBoard.h"
+#include "Board.h"
 #include "utils.h"
 
-GameBoard::GameBoard() {
+Board::Board() {
     reset();
 }
 
-GameBoard::GameBoard(const char *state) {
+Board::Board(const char *state) {
     operator=(state);
 }
 
-void GameBoard::reset() {
+char Board::get(uint8_t row, uint8_t col) const {
+    return _data[row * 6 + col];
+}
+
+char &Board::get(uint8_t row, uint8_t col) {
+    return _data[row * 6 + col];
+}
+
+void Board::set(uint8_t row, uint8_t col, char piece) {
+    _data[row * 6 + col] = piece;
+}
+
+void Board::reset() {
     for (uint8_t i = 0; i < 36; i++) {
         _data[i] = Symbol::Empty;
     }
@@ -20,11 +32,11 @@ void GameBoard::reset() {
     _data[21] = Symbol::Light;
 }
 
-const char *GameBoard::get_data() const {
+const char *Board::get_data() const {
     return _data;
 }
 
-uint8_t GameBoard::count_flipable_pieces(Color color, const Position &pos, Direction dir) const {
+uint8_t Board::count_flipable_pieces(Color color, const Position &pos, Direction dir) const {
     auto symbols = get_color_symbols(color);
     bool valid = false;
     uint8_t count = 0;
@@ -48,7 +60,7 @@ uint8_t GameBoard::count_flipable_pieces(Color color, const Position &pos, Direc
     return valid ? count : 0;
 }
 
-std::vector<Position> GameBoard::get_moves(Color color) const {
+std::vector<Position> Board::get_moves(Color color) const {
     std::vector<Position> v;
     for (uint8_t i = 0; i < 36; i++) {
         if (is_valid_move(color, i)) {
@@ -58,7 +70,7 @@ std::vector<Position> GameBoard::get_moves(Color color) const {
     return v;
 }
 
-uint8_t GameBoard::count_pieces(Color color) const {
+uint8_t Board::count_pieces(Color color) const {
     const char *symbols = get_color_symbols(color);
     uint8_t count = 0;
     for (uint8_t i = 0; i < 36; i++) {
@@ -69,7 +81,7 @@ uint8_t GameBoard::count_pieces(Color color) const {
     return count;
 }
 
-uint8_t GameBoard::count_corner(Color color) const {
+uint8_t Board::count_corner(Color color) const {
     static uint8_t corners[] = {0, 5, 30, 35};
 
     const char *symbols = get_color_symbols(color);
@@ -82,7 +94,7 @@ uint8_t GameBoard::count_corner(Color color) const {
     return count;
 }
 
-uint8_t GameBoard::count_edge(Color color) const {
+uint8_t Board::count_edge(Color color) const {
     const char *symbols = get_color_symbols(color);
     uint8_t count = 0;
 
@@ -114,7 +126,7 @@ uint8_t GameBoard::count_edge(Color color) const {
     return count;
 }
 
-uint8_t GameBoard::count_stable(Color color) const {
+uint8_t Board::count_stable(Color color) const {
     static uint8_t corners[] = {0, 5, 30, 35};
     static Direction valid_dirs[] = {Right, Down, Up, Left};
 
@@ -150,7 +162,7 @@ uint8_t GameBoard::count_stable(Color color) const {
 
 
 
-GameBoard &GameBoard::flip_pieces(Color color, const Position &pos) {
+Board &Board::flip_pieces(Color color, const Position &pos) {
     const char *symbols = get_color_symbols(color);
     for (uint8_t d = 0; d <= 7; d++) {
         Direction dir = static_cast<Direction>(d);
@@ -164,14 +176,14 @@ GameBoard &GameBoard::flip_pieces(Color color, const Position &pos) {
     return *this;
 }
 
-GameBoard GameBoard::flip_pieces(Color color, const Position &pos) const {
-    GameBoard board = *this;
+Board Board::flip_pieces(Color color, const Position &pos) const {
+    Board board = *this;
     board.flip_pieces(color, pos);
     return board;
 }
 
 
-bool GameBoard::is_valid_move(Color color, const Position &pos) const {
+bool Board::is_valid_move(Color color, const Position &pos) const {
     if (operator[](pos) != Symbol::Empty) {
         return false;
     }
@@ -185,7 +197,7 @@ bool GameBoard::is_valid_move(Color color, const Position &pos) const {
     return false;
 }
 
-bool GameBoard::has_valid_move(Color color) const {
+bool Board::has_valid_move(Color color) const {
     for (uint8_t i = 0; i < 36; i++) {
         if (is_valid_move(color, i)) {
             return true;
@@ -194,7 +206,7 @@ bool GameBoard::has_valid_move(Color color) const {
     return false;
 }
 
-uint8_t GameBoard::num_valid_moves(Color color) const {
+uint8_t Board::num_valid_moves(Color color) const {
     uint8_t count = 0;
     for (uint8_t i = 0; i < 36; i++) {
         count += is_valid_move(color, i);
@@ -202,32 +214,32 @@ uint8_t GameBoard::num_valid_moves(Color color) const {
     return count;
 }
 
-bool GameBoard::is_over() const {
+bool Board::is_over() const {
     return !has_valid_move(Dark) && !has_valid_move(Light);
 }
 
-char &GameBoard::operator[](const Position &pos) {
+char &Board::operator[](const Position &pos) {
     return _data[pos.get_index()];
 }
 
-char GameBoard::operator[](const Position &pos) const {
+char Board::operator[](const Position &pos) const {
     return _data[pos.get_index()];
 }
 
-GameBoard &GameBoard::operator=(const char *state) {
+Board &Board::operator=(const char *state) {
     for (uint8_t i = 0; i < 36; i++) {
         _data[i] = state[i];
     }
     return *this;
 }
 
-// std::istream &operator>>(std::istream &is, GameBoard &gb) {
+// std::istream &operator>>(std::istream &is, Board &gb) {
 //     char state[36];
 //     is >> state;
 //     gb.set_state(state);
 // }
 
-std::ostream &operator<<(std::ostream &os, const GameBoard &gb) {
+std::ostream &operator<<(std::ostream &os, const Board &gb) {
     auto state = gb.get_data();
 
     os << "  ";

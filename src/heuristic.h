@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reversi/GameBoard.h"
+#include "Reversi/Board.h"
 #include "Reversi/utils.h"
 
 #include <functional>
@@ -8,10 +8,10 @@
 #define CALC(a, b, w) ((w) == 0 || ((a) + (b)) == 0) ? 0 : ((w) * double((a) - (b)) / double((a) + (b)))
 
 namespace Heuristic {
-using Heuristic = std::function<double(const GameBoard &, Color)>;
+using Heuristic = std::function<double(const Board &, Color)>;
 
 static Heuristic bind_pmec(double wp, double wm, double we, double wc) {
-    auto pmec = [=](const GameBoard &board, Color color) {
+    auto pmec = [=](const Board &board, Color color) {
         Color c1 = color;
         Color c2 = get_opponent_color(c1);
         double sp = CALC(board.count_pieces(c1), board.count_pieces(c2), wp);

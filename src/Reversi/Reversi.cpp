@@ -4,7 +4,7 @@
 #include <iostream>
 
 float Reversi::compete(Agent *a1, Agent *a2, uint16_t n_games, bool verbose) {
-    GameBoard board;
+    Board board;
     float total = n_games;
     float a1_wins = 0;
     bool passed = false;
